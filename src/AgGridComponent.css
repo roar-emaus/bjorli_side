@@ -1,0 +1,39 @@
+.beaver-theme {
+    /*background-image: url('/texture.png');*/
+    color: #3e2806; /* deep brown color for text */
+}
+
+.beaver-select {
+    border: 1px solid #805e36; /* brown border */
+    background-color: #fffaf0;
+}
+
+.beaver-button {
+    background-color: #805e36; /* brown */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.beaver-button:hover {
+    background-color: #67412d; /* darker brown on hover */
+}
+
+.beaver-grid {
+    /*background-image: url('/texture.png');*/
+    border: 1px solid #3e2806; /* deep brown border to match the theme */
+}
+
+/* Customize the Ag-Grid with Beaver Theme */
+.ag-theme-alpine .ag-header-cell, .ag-theme-alpine .ag-cell {
+    color: #3e2806;
+    font-family: 'Lora', serif; /* A more readable font for the data grid */
+    /*font-family: 'Cabin Sketch', cursive; /* This is just an example, choose a font that matches the theme */
+}
+/* General body font */
+body {
+    font-family: 'Merriweather', serif; /* A serif font that's easy to read and has a natural feel */
+}
