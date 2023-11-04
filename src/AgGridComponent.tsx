@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import './AgGridComponent.css'
 import { getDates, getDateData, sendGame, BjorliGame, Game } from './Api';
 
 const AgGridComponent: React.FC = () => {
@@ -196,7 +197,7 @@ const AgGridComponent: React.FC = () => {
 
     return (
         <>
-            <div style={{ marginBottom: '10px', width: '100%' }}>
+            <div className="beaver-theme" style={{ marginBottom: '10px', width: '100%' }}>
                 <label>Velg dato: </label>
                 <select
                     value={selectedDate || ''}
@@ -209,12 +210,12 @@ const AgGridComponent: React.FC = () => {
                     ))}
                 </select>
             </div>
-            <div style={{ marginBottom: '10px' }}>
-                <button onClick={addNewPlayer}>Ny Spiller</button>
-                <button onClick={addNewGame}>Nytt Spill</button>
-                <button onClick={sendDataToApi}>Send Data</button>
+            <div className="beaver-button-group" style={{ marginBottom: '10px' }}>
+                <button className="beaver-button" onClick={addNewPlayer}>Ny Spiller</button>
+                <button className="beaver-button" onClick={addNewGame}>Nytt Spill</button>
+                <button className="beaver-button" onClick={sendDataToApi}>Send Data</button>
             </div>
-            <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }}>
+            <div className="ag-theme-alpine beaver-grid" style={{ height: '100%', width: '100%' }}>
                 <AgGridReact
                     domLayout='autoHeight'
                     onGridReady={onGridReady}
