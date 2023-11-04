@@ -215,14 +215,16 @@ const AgGridComponent: React.FC = () => {
                 <button className="beaver-button" onClick={addNewGame}>Nytt Spill</button>
                 <button className="beaver-button" onClick={sendDataToApi}>Send Data</button>
             </div>
-            <div className="ag-theme-alpine beaver-grid" style={{ height: '100%', width: '100%' }}>
+            <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }}>
                 <AgGridReact
                     domLayout='autoHeight'
                     onGridReady={onGridReady}
                     rowData={rowData}
                     columnDefs={columnDefs}
-                    defaultColDef={{    headerClass: 'ag-right-aligned-header',
-                    cellClass: 'ag-right-aligned-cell'  }}
+                    defaultColDef={{
+                      headerClass: 'ag-right-aligned-header',
+                      cellClass: 'ag-right-aligned-cell'
+                    }}
                 />
             </div>
         </>

@@ -1,5 +1,5 @@
 .beaver-theme {
-    background-image: url('/path-to-beaver-background.jpg');
+    /*background-image: url('/texture.png');*/
     color: #3e2806; /* deep brown color for text */
 }
 
@@ -23,12 +23,17 @@
 }
 
 .beaver-grid {
-    background-image: url('/path-to-wood-texture.jpg');
+    /*background-image: url('/texture.png');*/
     border: 1px solid #3e2806; /* deep brown border to match the theme */
 }
 
 /* Customize the Ag-Grid with Beaver Theme */
 .ag-theme-alpine .ag-header-cell, .ag-theme-alpine .ag-cell {
     color: #3e2806;
-    font-family: 'Cabin Sketch', cursive; /* This is just an example, choose a font that matches the theme */
+    font-family: 'Lora', serif; /* A more readable font for the data grid */
+    /*font-family: 'Cabin Sketch', cursive; /* This is just an example, choose a font that matches the theme */
+}
+/* General body font */
+body {
+    font-family: 'Merriweather', serif; /* A serif font that's easy to read and has a natural feel */
 }
