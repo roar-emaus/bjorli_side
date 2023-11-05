@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import './AgGridComponent.css'
+import './BjorlileikaPage.css'
 import { getDates, getDateData, sendGame, BjorliGame, Game } from './Api';
+import { constructColumnsFromGames, convertRowDataToGame, createPlayerRow } from './BjorlileikaPageUtil';
 
-const AgGridComponent: React.FC = () => {
+
+const BjorliLeikaPage: React.FC = () => {
     const [gridApi, setGridApi] = useState<any>(null);
-    const [gridColumnApi, setGridColumnApi] = useState<any>(null);
     const [rowData, setRowData] = useState<any[]>([]);
     const [columnDefs, setColumnDefs] = useState<any[]>([]);
 
@@ -36,69 +37,14 @@ const AgGridComponent: React.FC = () => {
         try {
             const result = await getDateData(date);
             if (result) {
-                constructColumnsFromGames(result.games);
+                constructColumnsFromGames(result.games, setColumnDefs);
                 constructRowsFromPlayersAndScores(result.players, result.games);
             }
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
-    const constructColumnsFromGames = (games: Game[]) => {
-        let newColumns = [{ headerName: "Spiller", field: "playerName"}];
-    
-        games.forEach(game => {
-            newColumns.push({
-                headerName: game.name,
-                field: game.name, 
-                editable: true,
-                cellStyle: { textAlign: "right" },
-                width: 110,
-                autoHeaderHeight: true,
-                sortable: true,
-                singleClickEdit: true,
-                cellEditor: "agNumberCellEditor",
-                cellEditorParams: {
-                  min: 1,
-                  max: 9,
-                  precision: 0,
-                },
-                cellDataType: "number",
-            }as any);
-        });
-        
-        // Add the "Total" column
-        newColumns.push({
-            headerName: "Total",
-            field: "total",
-            sortable: true,
 
-            valueGetter: (params: any) => {
-                // Multiplying all the scores for a player
-                return Object.keys(params.data).reduce((total, key) => {
-                    if (key !== 'playerName' && key !== 'total' && params.data[key]) {
-                        return total * params.data[key];
-                    }
-                    return total;
-                }, 1); // start multiplying from 1
-            },
-        } as any);
-    
-        setColumnDefs(newColumns);
-    };
-    const createPlayerRow = (player: string, games: Game[] = []): Record<string, any> => {
-        let playerRow: Record<string, any> = { playerName: player };
-        let total = 1;
-    
-        games.forEach(game => {
-            playerRow[game.name] = game.scores[player];
-            if (game.scores[player]) {
-                total *= game.scores[player];
-            }
-        });
-    
-        playerRow["total"] = total;
-        return playerRow;
-    };
     const addNewPlayer = () => {
         const newPlayerName = prompt("Spillerns navn?:");
     
@@ -128,6 +74,18 @@ const AgGridComponent: React.FC = () => {
                 headerName: newGameName,
                 field: newGameName,
                 editable: true,
+                cellStyle: { textAlign: "right" },
+                width: 110,
+                autoHeaderHeight: true,
+                sortable: true,
+                singleClickEdit: true,
+                cellEditor: "agNumberCellEditor",
+                cellEditorParams: {
+                  min: 1,
+                  max: 9,
+                  precision: 0,
+                },
+                cellDataType: "number",
             };
 
             // Update columns and rowData
@@ -149,34 +107,23 @@ const AgGridComponent: React.FC = () => {
             alert("Grid or date is not ready!");
             return;
         }
-    
         // Get the current data from the grid
         const rowDataArray: any[] = [];
         gridApi.forEachNode(node => rowDataArray.push(node.data));
-        const currentRowData = rowDataArray;
+
+        // Get game names (excluding playerName and total columns)
+        const gameNames = columnDefs
+            .filter(col => col.field !== 'playerName' && col.field !== 'total')
+            .map(col => col.field);
+
         // Convert grid data to BjorliGame object
         const bjorliGame: BjorliGame = {
             date: selectedDate,
             locked: false, // Or get the current status of the game if needed
-            games: [],
-            players: currentRowData.map(row => row.playerName)
+            games: convertRowDataToGame(rowDataArray, gameNames),
+            players: rowDataArray.map(row => row.playerName)
         };
-    
-        // Get game names (excluding playerName and total columns)
-        const gameNames = columnDefs.filter(col => col.field !== 'playerName' && col.field !== 'total').map(col => col.field);
-    
-        gameNames.forEach(gameName => {
-            const game: Game = {
-                name: gameName,
-                scores: {}
-            };
-    
-            currentRowData.forEach(row => {
-                game.scores[row.playerName] = row[gameName];
-            });
-    
-            bjorliGame.games.push(game);
-        });
+
     
         try {
             // Send the BjorliGame data using Api.addGame
@@ -192,7 +139,6 @@ const AgGridComponent: React.FC = () => {
     };
     const onGridReady = (params) => {
         setGridApi(params.api);
-        setGridColumnApi(params.columnApi);
     };
 
     return (
@@ -231,4 +177,4 @@ const AgGridComponent: React.FC = () => {
     );
 }
 
-export default AgGridComponent;
+export default BjorliLeikaPage;
