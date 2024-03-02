@@ -37,12 +37,14 @@ export const constructColumnsFromGames = (games: Game[], setColumnDefs) => {
             cellDataType: "number",
         }as any);
     });
-    
+
     // Add the "Total" column
     newColumns.push({
         headerName: "Total",
         field: "total",
         sortable: true,
+        sort: "asc",
+        pinned: "right",
 
         valueGetter: (params: any) => {
             // Multiplying all the scores for a player
