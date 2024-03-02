@@ -1,24 +1,24 @@
 import { Game } from "./Api";
 
 export const createPlayerRow = (player: string, games: Game[] = []): Record<string, any> => {
-    let playerRow: Record<string, any> = { playerName: player };
+    const playerRow: Record<string, any> = { playerName: player };
     let total = 1;
 
-    games.forEach(game => {
+    for (const game of games) {
         playerRow[game.name] = game.scores[player];
         if (game.scores[player]) {
             total *= game.scores[player];
         }
-    });
+    }
 
     playerRow["total"] = total;
     return playerRow;
 };
 
 export const constructColumnsFromGames = (games: Game[], setColumnDefs) => {
-    let newColumns = [{ headerName: "Spiller", field: "playerName"}];
+    const newColumns = [{ headerName: "Spiller", field: "playerName"}];
 
-    games.forEach(game => {
+    for (const game of games) {
         newColumns.push({
             headerName: game.name,
             field: game.name, 
@@ -30,13 +30,13 @@ export const constructColumnsFromGames = (games: Game[], setColumnDefs) => {
             singleClickEdit: true,
             cellEditor: "agNumberCellEditor",
             cellEditorParams: {
-              min: 1,
-              max: 9,
-              precision: 0,
+                min: 1,
+                max: 9,
+                precision: 0,
             },
             cellDataType: "number",
-        }as any);
-    });
+        });
+    }
 
     // Add the "Total" column
     newColumns.push({
@@ -62,10 +62,10 @@ export const constructColumnsFromGames = (games: Game[], setColumnDefs) => {
 
 export const convertRowDataToGame = (rowData: any[], gameNames: string[]): Game[] => {
     return gameNames.map(gameName => ({
-      name: gameName,
-      scores: rowData.reduce((acc, row) => {
-        acc[row.playerName] = row[gameName];
-        return acc;
-      }, {} as Record<string, number>)
+        name: gameName,
+        scores: rowData.reduce((acc, row) => {
+            acc[row.playerName] = row[gameName];
+            return acc;
+        }, {} as Record<string, number>)
     }));
-  };
+};
