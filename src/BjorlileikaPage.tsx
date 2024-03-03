@@ -81,9 +81,9 @@ const BjorliLeikaPage: React.FC = () => {
                 singleClickEdit: true,
                 cellEditor: "agNumberCellEditor",
                 cellEditorParams: {
-                    min: 1,
-                    max: 9,
-                    precision: 0,
+                  min: 1,
+                  max: 9,
+                  precision: 0,
                 },
                 cellDataType: "number",
             };
@@ -93,9 +93,9 @@ const BjorliLeikaPage: React.FC = () => {
             setRowData((prevRows) =>
                 prevRows && prevRows.length > 0
                     ? prevRows.map((row) => ({
-                            ...row,
+                          ...row,
                           [newGameName]: 0, // Default score value; adjust as needed
-                    }))
+                      }))
                     : []
             );
         } else if (newGameName !== null) { // Only show the alert if user didn't press Cancel
@@ -140,9 +140,7 @@ const BjorliLeikaPage: React.FC = () => {
     const onGridReady = (params) => {
         setGridApi(params.api);
     };
-    const autoSizeStrategy = {
-        type: 'fitAllColumns'
-    };
+
     return (
         <>
             <div className="beaver-theme" style={{ marginBottom: '10px', width: '100%' }}>
@@ -165,7 +163,6 @@ const BjorliLeikaPage: React.FC = () => {
             </div>
             <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }}>
                 <AgGridReact
-                autoSizeStrategy = {autoSizeStrategy}
                     domLayout='autoHeight'
                     onGridReady={onGridReady}
                     rowData={rowData}
@@ -174,7 +171,6 @@ const BjorliLeikaPage: React.FC = () => {
                       headerClass: 'ag-right-aligned-header',
                       cellClass: 'ag-right-aligned-cell'
                     }}
-                    
                 />
             </div>
         </>

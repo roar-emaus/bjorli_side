@@ -1,24 +1,24 @@
 import { Game } from "./Api";
 
 export const createPlayerRow = (player: string, games: Game[] = []): Record<string, any> => {
-    const playerRow: Record<string, any> = { playerName: player };
+    let playerRow: Record<string, any> = { playerName: player };
     let total = 1;
 
-    for (const game of games) {
+    games.forEach(game => {
         playerRow[game.name] = game.scores[player];
         if (game.scores[player]) {
             total *= game.scores[player];
         }
-    }
+    });
 
     playerRow["total"] = total;
     return playerRow;
 };
 
 export const constructColumnsFromGames = (games: Game[], setColumnDefs) => {
-    const newColumns = [{ headerName: "Spiller", field: "playerName"}];
+    let newColumns = [{ headerName: "Spiller", field: "playerName"}];
 
-    for (const game of games) {
+    games.forEach(game => {
         newColumns.push({
             headerName: game.name,
             field: game.name, 
@@ -30,21 +30,19 @@ export const constructColumnsFromGames = (games: Game[], setColumnDefs) => {
             singleClickEdit: true,
             cellEditor: "agNumberCellEditor",
             cellEditorParams: {
-                min: 1,
-                max: 9,
-                precision: 0,
+              min: 1,
+              max: 9,
+              precision: 0,
             },
             cellDataType: "number",
-        });
-    }
-
+        }as any);
+    });
+    
     // Add the "Total" column
     newColumns.push({
         headerName: "Total",
         field: "total",
         sortable: true,
-        sort: "asc",
-        pinned: "right",
 
         valueGetter: (params: any) => {
             // Multiplying all the scores for a player
@@ -62,10 +60,10 @@ export const constructColumnsFromGames = (games: Game[], setColumnDefs) => {
 
 export const convertRowDataToGame = (rowData: any[], gameNames: string[]): Game[] => {
     return gameNames.map(gameName => ({
-        name: gameName,
-        scores: rowData.reduce((acc, row) => {
-            acc[row.playerName] = row[gameName];
-            return acc;
-        }, {} as Record<string, number>)
+      name: gameName,
+      scores: rowData.reduce((acc, row) => {
+        acc[row.playerName] = row[gameName];
+        return acc;
+      }, {} as Record<string, number>)
     }));
-};
+  };
